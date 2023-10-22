@@ -2,6 +2,9 @@ import { useEffect, useReducer } from 'react';
 
 import Header from '../components/Header';
 import Main from '../components/Main';
+import Loader from '../components/Loader';
+import ErrorMessage from '../components/ErrorMessage';
+import StartScreen from '../components/StartScreen';
 
 enum Status {
   LOADING = 'LOADING',
@@ -49,7 +52,9 @@ function reducer(state: typeof initialState, action: Action) {
 }
 
 const Home = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
+
+  const questionsNum = questions.length;
 
   useEffect(() => {
     (async () => {
@@ -67,8 +72,9 @@ const Home = () => {
     <div className='app'>
       <Header />
       <Main>
-        <p>1/15</p>
-        <p>Question?</p>
+        {status === Status.LOADING && <Loader />}
+        {status === Status.ERROR && <ErrorMessage />}
+        {status === Status.READY && <StartScreen questionsNum={questionsNum} />}
       </Main>
     </div>
   );

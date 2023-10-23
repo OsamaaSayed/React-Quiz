@@ -1,16 +1,22 @@
 import Options from './Options';
 
-import { IQuestion } from '../types';
+import { Action, IQuestion } from '../types';
 
 type QuestionProps = {
   question: IQuestion;
+  dispatch: React.Dispatch<Action>;
+  answerIndex: null | number;
 };
 
-const Question = ({ question }: QuestionProps) => {
+const Question = ({ question, dispatch, answerIndex }: QuestionProps) => {
   return (
     <div>
       <h4>{question.question}</h4>
-      <Options question={question} />
+      <Options
+        question={question}
+        dispatch={dispatch}
+        answerIndex={answerIndex}
+      />
     </div>
   );
 };

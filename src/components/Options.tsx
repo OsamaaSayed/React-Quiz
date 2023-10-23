@@ -1,16 +1,28 @@
-import { IQuestion } from '../types';
+import { Action, IQuestion } from '../types';
 
 type OptionsProps = {
   question: IQuestion;
+  dispatch: React.Dispatch<Action>;
+  answerIndex: null | number;
 };
 
-const Options = ({ question }: OptionsProps) => {
+const Options = ({ question, dispatch, answerIndex }: OptionsProps) => {
+  const hasAnswered = answerIndex !== null;
+
   return (
     <div className='options'>
-      {question.options.map((option) => (
+      {question.options.map((option, index) => (
         <button
           key={option}
-          className='btn btn-option'
+          className={`btn btn-option ${index === answerIndex && index!== question.correctOption ? 'answer' : ''} ${
+            hasAnswered
+              ? index === question.correctOption
+                ? 'correct'
+                : 'wrong'
+              : ''
+          }`}
+          onClick={() => dispatch({ type: 'newAnswer', payload: index })}
+          disabled={hasAnswered}
         >
           {option}
         </button>

@@ -21,12 +21,16 @@ interface IInitialState {
   questions: IQuestion[];
   status: Status;
   index: number;
+  answerIndex: null | number;
+  points: number;
 }
 
 const initialState: IInitialState = {
   questions: [],
   status: Status.LOADING,
   index: 0,
+  answerIndex: null,
+  points: 0,
 };
 
 function reducer(state: typeof initialState, action: Action) {
@@ -41,13 +45,22 @@ function reducer(state: typeof initialState, action: Action) {
       return { ...state, status: Status.ERROR };
     case 'start':
       return { ...state, status: Status.ACTIVE };
+    case 'newAnswer':
+      return {
+        ...state,
+        answerIndex: action.payload as number,
+        points:
+          action.payload === state.questions.at(state.index)!.correctOption
+            ? state.points + state.questions.at(state.index)!.points
+            : state.points,
+      };
     default:
       throw new Error('Unkown action!');
   }
 }
 
 const Home = () => {
-  const [{ questions, status, index }, dispatch] = useReducer(
+  const [{ questions, status, index, answerIndex }, dispatch] = useReducer(
     reducer,
     initialState,
   );
@@ -78,7 +91,13 @@ const Home = () => {
             dispatch={dispatch}
           />
         )}
-        {status === Status.ACTIVE && <Question question={questions[index]} />}
+        {status === Status.ACTIVE && (
+          <Question
+            question={questions[index]}
+            dispatch={dispatch}
+            answerIndex={answerIndex}
+          />
+        )}
       </Main>
     </div>
   );

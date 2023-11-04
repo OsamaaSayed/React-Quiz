@@ -7,6 +7,7 @@ import ErrorMessage from '../components/ErrorMessage';
 import StartScreen from '../components/StartScreen';
 import Question from '../components/Question';
 import NextButton from '../components/NextButton';
+import Progress from '../components/Progress';
 
 import { Action, IQuestion } from '../types';
 
@@ -63,12 +64,14 @@ function reducer(state: typeof initialState, action: Action) {
 }
 
 const Home = () => {
-  const [{ questions, status, index, answerIndex }, dispatch] = useReducer(
-    reducer,
-    initialState,
-  );
+  const [{ questions, status, index, answerIndex, points }, dispatch] =
+    useReducer(reducer, initialState);
 
-  const questionsNum = questions.length;
+  const questionsNum = questions?.length;
+  const maxPoints = questions?.reduce(
+    (acc, currentValue) => acc + currentValue.points,
+    0,
+  );
 
   useEffect(() => {
     (async () => {
@@ -96,6 +99,14 @@ const Home = () => {
         )}
         {status === Status.ACTIVE && (
           <>
+            <Progress
+              index={index}
+              questionsNum={questionsNum}
+              points={points}
+              maxPoints={maxPoints}
+              answerIndex={answerIndex}
+            />
+
             <Question
               question={questions[index]}
               dispatch={dispatch}

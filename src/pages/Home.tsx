@@ -6,6 +6,7 @@ import Loader from '../components/Loader';
 import ErrorMessage from '../components/ErrorMessage';
 import StartScreen from '../components/StartScreen';
 import Question from '../components/Question';
+import NextButton from '../components/NextButton';
 
 import { Action, IQuestion } from '../types';
 
@@ -54,6 +55,8 @@ function reducer(state: typeof initialState, action: Action) {
             ? state.points + state.questions.at(state.index)!.points
             : state.points,
       };
+    case 'nextQuestion':
+      return { ...state, index: state.index + 1, answerIndex: null };
     default:
       throw new Error('Unkown action!');
   }
@@ -92,11 +95,15 @@ const Home = () => {
           />
         )}
         {status === Status.ACTIVE && (
-          <Question
-            question={questions[index]}
-            dispatch={dispatch}
-            answerIndex={answerIndex}
-          />
+          <>
+            <Question
+              question={questions[index]}
+              dispatch={dispatch}
+              answerIndex={answerIndex}
+            />
+
+            {answerIndex !== null && <NextButton dispatch={dispatch} />}
+          </>
         )}
       </Main>
     </div>

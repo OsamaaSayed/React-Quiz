@@ -9,9 +9,9 @@ import Question from '../components/Question';
 import NextButton from '../components/NextButton';
 import Progress from '../components/Progress';
 import FinishScreen from '../components/FinishScreen';
+import FinishButton from '../components/FinishButton';
 
 import { Action, IQuestion } from '../types';
-import FinishButton from '../components/FinishButton';
 
 enum Status {
   LOADING = 'LOADING',
@@ -47,10 +47,13 @@ function reducer(state: typeof initialState, action: Action) {
         questions: action.payload as IQuestion[],
         status: Status.READY,
       };
+
     case 'dataFailed':
       return { ...state, status: Status.ERROR };
+
     case 'start':
       return { ...state, status: Status.ACTIVE };
+
     case 'newAnswer':
       return {
         ...state,
@@ -60,8 +63,10 @@ function reducer(state: typeof initialState, action: Action) {
             ? state.points + state.questions.at(state.index)!.points
             : state.points,
       };
+
     case 'nextQuestion':
       return { ...state, index: state.index + 1, answerIndex: null };
+
     case 'finish':
       return {
         ...state,
@@ -69,6 +74,15 @@ function reducer(state: typeof initialState, action: Action) {
         highscore:
           state.points > state.highscore ? state.points : state.highscore,
       };
+
+    case 'restart':
+      return {
+        ...initialState,
+        status: Status.READY,
+        questions: state.questions,
+        highscore: state.highscore,
+      };
+
     default:
       throw new Error('Unkown action!');
   }
@@ -140,6 +154,7 @@ const Home = () => {
             points={points}
             maxPoints={maxPoints}
             highscore={highscore}
+            dispatch={dispatch}
           />
         )}
       </Main>

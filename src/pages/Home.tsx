@@ -6,10 +6,12 @@ import Loader from '../components/Loader';
 import ErrorMessage from '../components/ErrorMessage';
 import StartScreen from '../components/StartScreen';
 import Question from '../components/Question';
-import NextButton from '../components/NextButton';
 import Progress from '../components/Progress';
 import FinishScreen from '../components/FinishScreen';
+import Footer from '../components/Footer';
+import NextButton from '../components/NextButton';
 import FinishButton from '../components/FinishButton';
+import Timer from '../components/Timer';
 
 import { Action, IQuestion } from '../types';
 
@@ -88,6 +90,8 @@ function reducer(state: typeof initialState, action: Action) {
   }
 }
 
+const SECS_PER_QUESTION = 60;
+
 const Home = () => {
   const [
     { questions, status, index, answerIndex, points, highscore },
@@ -99,6 +103,7 @@ const Home = () => {
     (acc, currentValue) => acc + currentValue.points,
     0,
   );
+  const quizTime = questions?.length * SECS_PER_QUESTION;
 
   useEffect(() => {
     (async () => {
@@ -140,13 +145,20 @@ const Home = () => {
               answerIndex={answerIndex}
             />
 
-            {answerIndex !== null && index < questionsNum - 1 && (
-              <NextButton dispatch={dispatch} />
-            )}
+            <Footer>
+              {answerIndex !== null && index < questionsNum - 1 && (
+                <NextButton dispatch={dispatch} />
+              )}
 
-            {answerIndex !== null && index === questionsNum - 1 && (
-              <FinishButton dispatch={dispatch} />
-            )}
+              {answerIndex !== null && index === questionsNum - 1 && (
+                <FinishButton dispatch={dispatch} />
+              )}
+
+              <Timer
+                dispatch={dispatch}
+                quizTime={quizTime}
+              />
+            </Footer>
           </>
         )}
         {status === Status.FINISHED && (

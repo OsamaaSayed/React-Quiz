@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import { Action } from '../types';
+import { useQuiz } from '../context/QuizContext';
+import { ActionTypeEnum } from '../types';
 
-type TimerProps = {
-  dispatch: React.Dispatch<Action>;
-  quizTime: number;
-};
-
-const Timer = ({ dispatch, quizTime }: TimerProps) => {
+const Timer = () => {
+  const { quizTime, dispatch } = useQuiz();
   const [timer, setTimer] = useState(quizTime);
 
   const mins = Math.floor(timer / 60);
@@ -15,7 +12,7 @@ const Timer = ({ dispatch, quizTime }: TimerProps) => {
 
   useEffect(() => {
     const id = setInterval(() => {
-      if (timer === 0) dispatch({ type: 'finish' });
+      if (timer === 0) dispatch({ type: ActionTypeEnum.FINISH });
       else setTimer((prevTimer) => prevTimer - 1);
     }, 1000);
 

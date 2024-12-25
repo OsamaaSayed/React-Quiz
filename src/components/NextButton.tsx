@@ -1,15 +1,14 @@
-import { Action } from '../types';
+import { useQuiz } from '../context/QuizContext';
+import { ActionTypeEnum } from '../types';
 
-type NextButtonProps = {
-  dispatch: React.Dispatch<Action>;
-};
+const NextButton = () => {
+  const { dispatch } = useQuiz();
 
-const NextButton = ({ dispatch }: NextButtonProps) => {
   return (
     <button
       className='btn btn-ui'
       onClick={() => {
-        dispatch({ type: 'nextQuestion' });
+        dispatch({ type: ActionTypeEnum.NEXT_QUESTION });
       }}
     >
       Next

@@ -1,18 +1,9 @@
-import { Action } from '../types';
+import { useQuiz } from '../context/QuizContext';
+import { ActionTypeEnum } from '../types';
 
-type FinishScreenProps = {
-  points: number;
-  maxPoints: number;
-  highscore: number;
-  dispatch: React.Dispatch<Action>;
-};
+const FinishScreen = () => {
+  const { points, maxPoints, highscore, dispatch } = useQuiz();
 
-const FinishScreen = ({
-  points,
-  maxPoints,
-  highscore,
-  dispatch,
-}: FinishScreenProps) => {
   const percentage = Math.ceil((points / maxPoints) * 100);
 
   let emoji;
@@ -36,7 +27,7 @@ const FinishScreen = ({
       <button
         className='btn btn-ui'
         onClick={() => {
-          dispatch({ type: 'restart' });
+          dispatch({ type: ActionTypeEnum.RESTART });
         }}
       >
         Restart quiz

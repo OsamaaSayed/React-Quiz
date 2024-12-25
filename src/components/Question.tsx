@@ -1,22 +1,13 @@
+import { useQuiz } from '../context/QuizContext';
 import Options from './Options';
 
-import { Action, IQuestion } from '../types';
+const Question = () => {
+  const { questions, index } = useQuiz();
 
-type QuestionProps = {
-  question: IQuestion;
-  dispatch: React.Dispatch<Action>;
-  answerIndex: null | number;
-};
-
-const Question = ({ question, dispatch, answerIndex }: QuestionProps) => {
   return (
     <div>
-      <h4>{question.question}</h4>
-      <Options
-        question={question}
-        dispatch={dispatch}
-        answerIndex={answerIndex}
-      />
+      <h4>{questions[index].question}</h4>
+      <Options />
     </div>
   );
 };

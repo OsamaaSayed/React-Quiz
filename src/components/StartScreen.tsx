@@ -1,18 +1,16 @@
-import { Action } from '../types';
+import { useQuiz } from '../context/QuizContext';
+import { ActionTypeEnum } from '../types';
 
-type StartScreenProps = {
-  questionsNum: number;
-  dispatch: React.Dispatch<Action>;
-};
+const StartScreen = () => {
+  const { questionsNum, dispatch } = useQuiz();
 
-const StartScreen = ({ questionsNum, dispatch }: StartScreenProps) => {
   return (
     <div className='start'>
       <h2>Welcome To The React Quiz!</h2>
       <h3>{questionsNum} Questions to test your React mastery</h3>
       <button
         className='btn btn-ui'
-        onClick={() => dispatch({ type: 'start' })}
+        onClick={() => dispatch({ type: ActionTypeEnum.START })}
       >
         Let's start
       </button>

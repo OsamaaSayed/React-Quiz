@@ -1,33 +1,32 @@
-import { Action, IQuestion } from '../types';
+import { useQuiz } from '../context/QuizContext';
+import { ActionTypeEnum } from '../types';
 
-type OptionsProps = {
-  question: IQuestion;
-  dispatch: React.Dispatch<Action>;
-  answerIndex: null | number;
-};
+const Options = () => {
+  const { questions, index, answerIndex, dispatch } = useQuiz();
 
-const Options = ({ question, dispatch, answerIndex }: OptionsProps) => {
   const hasAnswered = answerIndex !== null;
 
   return (
     <div className='options'>
-      {question.options.map((option, index) => (
+      {questions[index].options.map((option, idx) => (
         <button
           key={option}
           className={`btn btn-option ${
-            index === answerIndex
-              ? index !== question.correctOption
+            idx === answerIndex
+              ? idx !== questions[index].correctOption
                 ? 'wrong'
                 : ''
               : ''
           } ${
             hasAnswered
-              ? index === question.correctOption
+              ? idx === questions[index].correctOption
                 ? 'answer correct'
                 : ''
               : ''
           }`}
-          onClick={() => dispatch({ type: 'newAnswer', payload: index })}
+          onClick={() =>
+            dispatch({ type: ActionTypeEnum.NEW_ANSWER, payload: idx })
+          }
           disabled={hasAnswered}
         >
           {option}

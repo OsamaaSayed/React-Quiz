@@ -1,15 +1,14 @@
-import { Action } from '../types';
+import { useQuiz } from '../context/QuizContext';
+import { ActionTypeEnum } from '../types';
 
-type FinishButtonProps = {
-  dispatch: React.Dispatch<Action>;
-};
+const FinishButton = () => {
+  const { dispatch } = useQuiz();
 
-const FinishButton = ({ dispatch }: FinishButtonProps) => {
   return (
     <button
       className='btn btn-ui'
       onClick={() => {
-        dispatch({ type: 'finish' });
+        dispatch({ type: ActionTypeEnum.FINISH });
       }}
     >
       Finish
